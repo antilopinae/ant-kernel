@@ -1,6 +1,3 @@
-[submodule "cmake"]
-	path = cmake
-	url = https://github.com/antilopinae/cmake.git
 [submodule "ant-cmake"]
 	path = ant-cmake
 	url = https://github.com/antilopinae/ant-cmake.git

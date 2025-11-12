@@ -3,7 +3,7 @@
  */
 
 #include <linux/kernel.h>
-#include "logger.h"
+#include "include/logger.h"
 
 void kern_log(const char* fmt, ...)
 {

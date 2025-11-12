@@ -3,8 +3,8 @@
 */
 #include <linux/kernel.h>
 #include <linux/module.h>
-#include "cpp_module.h"
-#include "logger.h"
+#include "include/cpp_module.h"
+#include "include/logger.h"
 
 /* Also needed to define NULL as simple 0. It's Ok by standard. */
 #define NULL 0

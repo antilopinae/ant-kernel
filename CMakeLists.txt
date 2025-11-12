@@ -7,5 +7,8 @@ include(NoInSourceBuilds OPTIONAL)
 
 project(ant-kernel VERSION 1.0.0 LANGUAGES CXX C)
 
+include(PlatformDetection REQUIRED)
+include(CopyKernelHeaders REQUIRED)
+
 add_subdirectory(c)
 add_subdirectory(cpp)

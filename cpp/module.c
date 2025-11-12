@@ -5,8 +5,8 @@
 #include <linux/kernel.h>
 #include <linux/module.h>
 
-#include "logger.h"
-#include "cpp_module.h"
+#include "include/logger.h"
+#include "include/cpp_module.h"
 
 static int __init module_load(void)
 {

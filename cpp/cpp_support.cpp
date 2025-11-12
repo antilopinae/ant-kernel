@@ -3,8 +3,8 @@
  */
 
 #include <cstddef>
-#include "kern_lib.h"
-#include "logger.h"
+#include "include/kern_lib.h"
+#include "include/logger.h"
 
 void *operator new(size_t sz) throw ()
 {

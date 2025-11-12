@@ -6,7 +6,7 @@
 #include <linux/slab.h>
 #include <linux/string.h>
 
-#include "kern_lib.h"
+#include "include/kern_lib.h"
 
 void kcmemset(void *dst, int c, unsigned int len)
 {

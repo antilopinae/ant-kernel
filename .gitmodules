@@ -1,3 +1,6 @@
 [submodule "ant-cmake"]
 	path = ant-cmake
 	url = https://github.com/antilopinae/ant-cmake.git
+[submodule "sources/akl"]
+	path = sources/akl
+	url = https://github.com/antilopinae/akl.git

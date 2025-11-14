@@ -5,6 +5,7 @@
 #include <linux/module.h>
 #include "include/cpp_module.h"
 #include "include/logger.h"
+#include "akl/atomic.hpp"
 
 /* Also needed to define NULL as simple 0. It's Ok by standard. */
 #define NULL 0
@@ -14,6 +15,21 @@ public:
     foo()
         : a(0) {
         kern_log("C++ class constructor\n");
+
+        // Unsupported DW_TAG_reference_type(0x10): type: 0x1f0b6
+        akl::atomic<int> atom{1};
+
+/*
+        atom.exchange(1);
+        atom.dec();
+        atom.dec_ret_last();
+        atom.inc();
+        atom.inc_ret_last();
+        atom.operator++();
+        atom.operator--();
+        atom.operator+=(5);
+        atom.operator-=(5);
+*/
     }
 
     ~foo() {
@@ -35,7 +51,7 @@ protected:
 /* Class bar is inheritor of the class foo
  * Overloading implementation of the class methods
  */
-class bar : foo {
+class bar : public foo {
 public:
     /* Virtual destructor is required */
     ~bar() {

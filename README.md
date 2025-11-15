@@ -2,13 +2,13 @@
 
 ### Style code in C++ in linux kernel mode while you are writing kernel module with this library
 
-#### Not use references
+#### You can Not use references
 
 We do not use references in our code!
 Because BPF sanitizer can not pass our code with refs
 If you want to use reference in public methods, use pointers!
 
-#### Not use templates in the usual sense
+#### You can Not use templates in the usual sense
 
 You can not do this in kernel module C++:
 
@@ -51,10 +51,12 @@ Because BPF verifier will say something like this about `<` and `>``:
 akl::some_class_int atom6 = {7};
 ```
 
-#### But you can use templates
+#### But You can use templates
 
-I write simple python script in ant-cmake/scripts which is used for rewrite symbols `<` and `>` with _ in ELF part
-So, I also add it to my cmake function `add_cpp_kernel_module` to do it in compile time
+I write simple python script in `ant-cmake/scripts/extract_templates_from_ko.py`
+which is used for rewrite symbols `<` and `>` with `_` in ELF part.
+
+So, I also add it to my cmake function `add_cpp_kernel_module` to do it in compile time.
 
 With it, my BPF verifier shut up and now I can use templates in my code with some limitations:
 
@@ -100,7 +102,7 @@ add_cpp_kernel_module(
 )
 ```
 
-#### Not use parentheses in constructors
+#### You can Not use parentheses in constructors
 
 ```cpp
 // It was failed to compile in linux kernel mode

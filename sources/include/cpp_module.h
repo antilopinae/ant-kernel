@@ -1,6 +1,3 @@
-/*
-*/
-
 #ifndef CPP_MODULE_H
 #define CPP_MODULE_H
 

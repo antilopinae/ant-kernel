@@ -5,8 +5,8 @@
 #include <linux/kernel.h>
 #include <linux/module.h>
 
-#include "include/logger.h"
-#include "include/cpp_module.h"
+#include "akl/logger.h"
+#include "cpp_module.h"
 
 static int __init module_load(void)
 {
@@ -14,6 +14,9 @@ static int __init module_load(void)
 
     init_cpp_subsystem_example();
 
+    // call_constructors();
+
+    pr_info("Loaded the kernel module.\n");
     return 0;
 }
 
@@ -22,6 +25,9 @@ static void __exit module_unload(void)
     kern_log("Unloading C++ kernel module\n");
 
     release_cpp_subsystem_example();
+
+    // call_destructors();
+    pr_info("Unloaded the kernel module.\n");
 }
 
 module_init(module_load);

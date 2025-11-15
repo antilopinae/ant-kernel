@@ -1,14 +1,17 @@
-/*
-* C++ component inside the Linux kernel
-*/
+#ifdef __KERNEL_MODULE__
 #include <linux/kernel.h>
 #include <linux/module.h>
-#include "include/cpp_module.h"
-#include "include/logger.h"
-#include "akl/atomic.hpp"
 
 /* Also needed to define NULL as simple 0. It's Ok by standard. */
 #define NULL 0
+#else
+#include <cstddef>
+
+#endif
+
+#include "cpp_module.h"
+#include "akl/logger.h"
+#include "akl/__sync.h"
 
 class foo {
 public:
@@ -16,8 +19,7 @@ public:
         : a(0) {
         kern_log("C++ class constructor\n");
 
-        // Unsupported DW_TAG_reference_type(0x10): type: 0x1f0b6
-        akl::atomic<int> atom{1};
+        // akl::atomic<int> atom = akl::atomic<int>{1};
 
 /*
         atom.exchange(1);
@@ -69,9 +71,21 @@ public:
 
 static bar *bar_instance = NULL;
 
+static int v = 10;
+
 /* This functions can be called from the C code */
 void init_cpp_subsystem_example(void) {
     kern_log("Init C++ subsystem\n");
+
+    kern_log("akl CAS test start\n");
+
+    bool ok = bool_compare_and_swap(&v, 10, 20);
+    kern_log("CAS returned: %d\n", ok);
+    kern_log("New value: %d\n", v);
+
+    ok = bool_compare_and_swap(&v, 10, 30);
+    kern_log("CAS returned: %d\n", ok);
+    kern_log("Value after failed CAS: %d\n", v);
 
     bar_instance = new bar;
 

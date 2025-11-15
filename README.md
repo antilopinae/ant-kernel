@@ -27,6 +27,8 @@ akl::some_class<int> atom5 = {3};
 // It was failed by verifier while loading kernel module via `insmod`
 auto atom6 = atom5;
 ```
+(But you can use all of these types to construct a class or struct without template substitution)
+
 
 Because BPF verifier will say something like this about `<` and `>``:
 ```
@@ -49,7 +51,54 @@ Because BPF verifier will say something like this about `<` and `>``:
 akl::some_class_int atom6 = {7};
 ```
 
-But you can use all of these types to construct a class or struct without template substitution.
+#### But you can use templates
+
+I write simple python script in ant-cmake/scripts which is used for rewrite symbols `<` and `>` with _ in ELF part
+So, I also add it to my cmake function `add_cpp_kernel_module` to do it in compile time
+
+With it, my BPF verifier shut up and now I can use templates in my code with some limitations:
+
+You need to specify every template class in cmake variable:
+
+As example in akl:
+
+```cmake
+set(AKL_TEMPLATE_NAMES
+        "atomic"
+        "atomic_impl"
+        CACHE INTERNAL "Ant kernel lib template names in cpp code" FORCE
+)
+```
+
+and then pass them to my function:
+
+```cmake
+# Func to add target and then build C++ module
+add_cpp_kernel_module(
+        # target 'cpp_kernel' to build kernel module
+        MODULE_NAME cpp_kernel_module
+
+        # dir where module src are
+        MODULE_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}
+
+        # list with src of module (.c and .cpp)
+        MODULE_SRC ${CPP_KERNEL_MODULE_SRC}
+
+        # list with include directories of module
+        MODULE_INCLUDE_DIRS
+        include/
+        some_other_dirs/
+        ${AKL_INCLUDE_DIRS}
+
+        # list with names classes which used template substitution
+        MODULE_TEMPLATE_NAMES
+        ${AKL_TEMPLATE_NAMES}
+        my_new_template_class_name
+        unique_ptr
+        shared_ptr
+        # and others
+)
+```
 
 #### Not use parentheses in constructors
 

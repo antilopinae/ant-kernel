@@ -48,7 +48,7 @@ Because BPF verifier will say something like this about `<` and `>``:
 
 ```cpp
 // It was okay
-akl::some_class_int atom6 = {7};
+akl::some_class_int_ atom6 = {7};
 ```
 
 #### But You can use templates

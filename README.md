@@ -5,7 +5,7 @@
 #### Not use references
 
 We do not use references in our code!
-Because BTF sanitizer can not pass our code with refs
+Because BPF sanitizer can not pass our code with refs
 If you want to use reference in public methods, use pointers!
 
 #### Not use templates in the usual sense
@@ -28,7 +28,7 @@ akl::some_class<int> atom5 = {3};
 auto atom6 = atom5;
 ```
 
-Because BTF verifier will say something like this about `<` and `>``:
+Because BPF verifier will say something like this about `<` and `>``:
 ```
 [11142.874462] BPF: [24] STRUCT atomic_impl<int, true>
 [11142.874467] BPF: size=4 vlen=1
@@ -44,13 +44,18 @@ Because BTF verifier will say something like this about `<` and `>``:
 [11205.309415] failed to validate module [cpp_kernel] BTF: -22
 ```
 
+```cpp
+// It was okay
+akl::some_class_int atom6 = {7};
+```
+
 But you can use all of these types to construct a class or struct without template substitution.
 
 #### Not use parentheses in constructors
 
 ```cpp
 // It was failed to compile in linux kernel mode
-akl::some_class<int> not_atom(2);
+akl::some_class_int not_atom(2);
 ```
 
 Also you can do:

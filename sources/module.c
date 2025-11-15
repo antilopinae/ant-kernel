@@ -10,7 +10,7 @@
 
 static int __init module_load(void)
 {
-    kern_log("Loading C++ kernel module\n");
+    akl_kern_log("Loading C++ kernel module\n");
 
     init_cpp_subsystem_example();
 
@@ -22,7 +22,7 @@ static int __init module_load(void)
 
 static void __exit module_unload(void)
 {
-    kern_log("Unloading C++ kernel module\n");
+    akl_kern_log("Unloading C++ kernel module\n");
 
     release_cpp_subsystem_example();
 
@@ -35,5 +35,5 @@ module_exit(module_unload);
 
 MODULE_DESCRIPTION ("Linux kernel module with C++");
 MODULE_VERSION ("0.1");
-MODULE_AUTHOR ("Oleg Kutkov");
+MODULE_AUTHOR ("ANT");
 MODULE_LICENSE ("GPL");

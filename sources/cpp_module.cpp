@@ -9,33 +9,20 @@
 
 #endif
 
-#include "cpp_module.h"
+#include "akl/atomic.hpp"
 #include "akl/logger.h"
-#include "akl/__sync.h"
+#include "akl/sync.h"
+#include "cpp_module.h"
 
 class foo {
 public:
     foo()
         : a(0) {
-        kern_log("C++ class constructor\n");
-
-        // akl::atomic<int> atom = akl::atomic<int>{1};
-
-/*
-        atom.exchange(1);
-        atom.dec();
-        atom.dec_ret_last();
-        atom.inc();
-        atom.inc_ret_last();
-        atom.operator++();
-        atom.operator--();
-        atom.operator+=(5);
-        atom.operator-=(5);
-*/
+        akl_kern_log("C++ class constructor\n");
     }
 
     ~foo() {
-        kern_log("C++ class destructor\n");
+        akl_kern_log("C++ class destructor\n");
     }
 
     /* "Normal" virtual function */
@@ -56,11 +43,10 @@ protected:
 class bar : public foo {
 public:
     /* Virtual destructor is required */
-    ~bar() {
-    }
+    ~bar() {}
 
     void set_data(int data) {
-        kern_log(">> set_data %d\n", data);
+        akl_kern_log(">> set_data %d\n", data);
         a = data;
     }
 
@@ -69,38 +55,59 @@ public:
     }
 };
 
-static bar *bar_instance = NULL;
+static bar* bar_instance = NULL;
 
 static int v = 10;
 
 /* This functions can be called from the C code */
 void init_cpp_subsystem_example(void) {
-    kern_log("Init C++ subsystem\n");
+    akl_kern_log("Init C++ subsystem\n");
 
-    kern_log("akl CAS test start\n");
+    akl_kern_log("akl CAS test start\n");
 
-    bool ok = bool_compare_and_swap(&v, 10, 20);
-    kern_log("CAS returned: %d\n", ok);
-    kern_log("New value: %d\n", v);
+    bool ok = akl_sync_bool_compare_and_swap(&v, 10, 20);
+    akl_kern_log("CAS returned: %d\n", ok);
+    akl_kern_log("New value: %d\n", v);
 
-    ok = bool_compare_and_swap(&v, 10, 30);
-    kern_log("CAS returned: %d\n", ok);
-    kern_log("Value after failed CAS: %d\n", v);
+    ok = akl_sync_bool_compare_and_swap(&v, 10, 30);
+    akl_kern_log("CAS returned: %d\n", ok);
+    akl_kern_log("Value after failed CAS: %d\n", v);
+
+    // atomic<int> atom = atomic<int>{.value_ = 3};
+    // atomic<int> other;
+
+    int a = 3;
+
+    akl::atomic_int atom = akl::atomic_int{12};
+
+    atom.exchange(1);
+    akl_kern_log("Test atom 1: %d\n", static_cast<int>(atom.value));
+
+    atom.dec();
+    atom.dec_ret_last();
+    atom.inc();
+    atom.inc_ret_last();
+    atom.operator++();
+    atom.operator--();
+    atom.operator+=(5);
+    atom.operator-=(5);
+
+    akl_kern_log("Test atom 1: %d\n", static_cast<int>(atom.value));
 
     bar_instance = new bar;
 
     if (!bar_instance) {
-        kern_log("Failed to allocate bar class\n");
+        akl_kern_log("Failed to allocate bar class\n");
         return;
     }
 
     bar_instance->set_data(42);
 
-    kern_log("Getting data from bar: %d\n", bar_instance->get_data());
+    akl_kern_log("Getting data from bar: %d\n", bar_instance->get_data());
 }
 
 void release_cpp_subsystem_example(void) {
-    kern_log("Release C++ subsystem\n");
+    akl_kern_log("Release C++ subsystem\n");
 
     if (bar_instance) {
         delete bar_instance;

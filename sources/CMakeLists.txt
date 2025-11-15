@@ -32,6 +32,10 @@ add_cpp_kernel_module(
         MODULE_INCLUDE_DIRS
         include/
         ${AKL_INCLUDE_DIRS}
+
+        # list with names classes which used template substitution
+        MODULE_TEMPLATE_NAMES
+        ${AKL_TEMPLATE_NAMES}
 )
 
 # target 'cpp_kernel_userspace' to build userspace kernel module

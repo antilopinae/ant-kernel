@@ -73,12 +73,9 @@ void init_cpp_subsystem_example(void) {
     akl_kern_log("CAS returned: %d\n", ok);
     akl_kern_log("Value after failed CAS: %d\n", v);
 
-    // atomic<int> atom = atomic<int>{.value_ = 3};
-    // atomic<int> other;
-
     int a = 3;
 
-    akl::atomic_int atom = akl::atomic_int{12};
+    akl::atomic_int_ atom = akl::atomic_int_{12};
 
     atom.exchange(1);
     akl_kern_log("Test atom 1: %d\n", static_cast<int>(atom.value));
